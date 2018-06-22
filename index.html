@@ -1,0 +1,225 @@
+<html>
+<head>
+</head>
+<body>
+<center>
+<div id="JOQUEMPO">
+
+    <h1>Pedra, Papel e Tesoura</h1>
+
+    <label for="placar-jogador" id="label-jogador">Jogador</label>
+    <input type="text" id="placar-jogador" class="placar" readonly="readonly" value="0" />
+    VS
+    <input type="text" id="placar-Maquina" class="placar" readonly="readonly" value="0" />
+    <label for="placar-Maquina">Máquina</label>
+
+    <br /><br />
+
+    <select id="opcaojogador">
+        <option value=""> -- Escolha a opção -- </option>
+        <option value="pedra"> Pedra </option>
+        <option value="papel"> Papel </option>
+        <option value="tesoura"> Tesoura </option>
+    </select>
+
+    <input type="button" value="Jogar!" id="btn-action" />
+
+    <br /><br /><br />
+
+    <table>
+        <tr>
+            <th id="th-jogador">Jogador</th>
+            <td>&nbsp;</td>
+            <th>Máquina</th>
+        </tr>
+        <tr>
+            <td id="cmp-jogador">--</td>
+            <td> VS </td>
+            <td id="cmp-Maquina">--</td>
+        </tr>
+        <tr>
+            <th>Vencedor: </th>
+            <td>&nbsp;</td>
+            <td id="cmp-vencedor">--</td>
+        </tr>        
+    </table>
+
+</div>
+</center>
+
+<script type="text/javascript">
+
+var JOQUEMPO = (function() {
+
+  var
+    nomeJogador,
+    escolhaJogador,
+    escolhaMaquina,
+    vencedor,
+    pontosJogador,
+    pontosMaquina;
+
+  var setNomeDoJogador = function(nome) {
+    nomeJogador = nome;
+  };
+
+  var getNomeDoJogador = function() {
+    return nomeJogador;
+  };
+
+  var setEscolhaJogador = function(escolha) {
+    escolhaJogador = escolha;
+  };
+
+  var getEscolhaJogador = function() {
+    return escolhaJogador;
+  };
+
+  var setEscolhaMaquina = function(escolha) {
+    escolhaMaquina = escolha;
+  };
+
+  var getEscolhaMaquina = function() {
+
+    var escolhaMaquina = Math.round(Math.random() * 2);
+    switch (escolhaMaquina) {
+      case 0:
+        escolhaMaquina = 'pedra';
+        break;
+      case 1:
+        escolhaMaquina = 'papel';
+        break
+      case 2:
+        escolhaMaquina = 'tesoura';
+        break;
+    }
+    setEscolhaMaquina(escolhaMaquina);
+    return escolhaMaquina;
+
+  };
+
+  var getVencedor = function() {
+
+    if (escolhaJogador == 'pedra') {
+
+      if (escolhaMaquina == 'pedra') {
+        vencedor = 'empate';
+      } else if (escolhaMaquina == 'papel') {
+        vencedor = 'Maquina';
+      } else if (escolhaMaquina == 'tesoura') {
+        vencedor = 'jogador';
+      }
+
+    } else if (escolhaJogador == 'papel') {
+
+      if (escolhaMaquina == 'pedra') {
+        vencedor = 'jogador';
+      } else if (escolhaMaquina == 'papel') {
+        vencedor = 'empate';
+      } else if (escolhaMaquina == 'tesoura') {
+        vencedor = 'Maquina';
+      }
+
+    } else if (escolhaJogador == 'tesoura') {
+
+      if (escolhaMaquina == 'pedra') {
+        vencedor = 'Maquina';
+      } else if (escolhaMaquina == 'papel') {
+        vencedor = 'jogador';
+      } else if (escolhaMaquina == 'tesoura') {
+        vencedor = 'empate';
+      }
+
+    }
+
+    if (vencedor == 'jogador' && nomeJogador != '') {
+      vencedor = nomeJogador;
+      if (getPontosJogador() != null) {
+        setPontosJogador(getPontosJogador() + 1);
+      } else {
+        setPontosJogador(1);
+      }
+    } else if (vencedor == 'Maquina') {
+      if (getPontosMaquina() != null) {
+        setPontosMaquina(getPontosMaquina() + 1);
+      } else {
+        setPontosMaquina(1);
+      }
+    }
+
+    return vencedor;
+
+  };
+
+  var getPontosMaquina = function() {
+    return pontosMaquina;
+  };
+
+  var setPontosMaquina = function(pontos) {
+    pontosMaquina = pontos;
+  };
+
+  var getPontosJogador = function() {
+    return pontosJogador;
+  };
+
+  var setPontosJogador = function(pontos) {
+    pontosJogador = pontos;
+  };
+
+  return {
+    setNomeDoJogador: setNomeDoJogador,
+    getNomeDoJogador: getNomeDoJogador,
+    setEscolhaJogador: setEscolhaJogador,
+    getEscolhaMaquina: getEscolhaMaquina,
+    getVencedor: getVencedor,
+    setPontosMaquina: setPontosMaquina,
+    setPontosJogador: setPontosJogador,
+    getPontosMaquina: getPontosMaquina,
+    getPontosJogador: getPontosJogador
+  };
+
+})();
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+(function() {
+
+  var nomeJogador = prompt("Digite aqui seu nome:");
+
+  if (nomeJogador == '' || nomeJogador == null) {
+    nomeJogador = 'Jogador';
+  }
+
+  JOQUEMPO.setNomeDoJogador(nomeJogador);
+  JOQUEMPO.setPontosMaquina(0);
+  JOQUEMPO.setPontosJogador(0);
+
+  document.getElementById("btn-action").onclick = function() {
+
+    var escolhaJogador = document.getElementById("opcaojogador").value;
+
+    if (escolhaJogador == '') {
+      alert('Por gentileza escolha uma opção válida: Pedra, Papel ou Tesoura!');
+      return false;
+    }
+
+    document.getElementById("cmp-jogador").innerHTML = capitalizeFirstLetter(escolhaJogador);
+    JOQUEMPO.setEscolhaJogador(escolhaJogador);
+    document.getElementById("cmp-Maquina").innerHTML = capitalizeFirstLetter(JOQUEMPO.getEscolhaMaquina());
+    document.getElementById("cmp-vencedor").innerHTML = capitalizeFirstLetter(JOQUEMPO.getVencedor());
+    document.getElementById("placar-jogador").value = JOQUEMPO.getPontosJogador();
+    document.getElementById("placar-Maquina").value = JOQUEMPO.getPontosMaquina();
+    document.getElementById("label-jogador").innerHTML = JOQUEMPO.getNomeDoJogador();
+    document.getElementById("th-jogador").innerHTML = JOQUEMPO.getNomeDoJogador();
+
+  };
+
+})();
+
+</script>
+
+</body>
+</html>
